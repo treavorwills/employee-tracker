@@ -49,6 +49,18 @@ function getTask() {
         },
         {
             type: 'input',
+            name: 'newSalary',
+            message: 'Salary',
+            when: (answers) => answers.task === 'Add a role'
+        },
+        {
+            type: 'input',
+            name: 'newRolesDepartment',
+            message: 'Department',
+            when: (answers) => answers.task === 'Add a role'
+        },
+        {
+            type: 'input',
             name: 'newFirstName',
             message: 'New Employee First Name',
             when: (answers) => answers.task === 'Add an employee'
@@ -57,6 +69,18 @@ function getTask() {
             type: 'input',
             name: 'newLastName',
             message: 'New Employee Last Name',
+            when: (answers) => answers.task === 'Add an employee'
+        },
+        {
+            type: 'input',
+            name: 'newEmployeeRole',
+            message: 'New Employee\'s Role',
+            when: (answers) => answers.task === 'Add an employee'
+        },
+        {
+            type: 'input',
+            name: 'newEmployeeManager',
+            message: 'New Employee\'s Manager',
             when: (answers) => answers.task === 'Add an employee'
         },
     ];
