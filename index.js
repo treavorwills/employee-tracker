@@ -56,7 +56,7 @@ function getTask() {
         {
             type: 'input',
             name: 'newRolesDepartment',
-            message: 'Department',
+            message: 'Department ID',
             when: (answers) => answers.task === 'Add a role'
         },
         {
@@ -74,13 +74,13 @@ function getTask() {
         {
             type: 'input',
             name: 'newEmployeeRole',
-            message: 'New Employee\'s Role',
+            message: 'New Employee\'s Role ID',
             when: (answers) => answers.task === 'Add an employee'
         },
         {
             type: 'input',
             name: 'newEmployeeManager',
-            message: 'New Employee\'s Manager',
+            message: 'New Employee\'s Manager ID',
             when: (answers) => answers.task === 'Add an employee'
         },
     ];
@@ -88,13 +88,19 @@ function getTask() {
     inquirer.prompt(question).then(answers => {
         switch (answers.task) {
             case 'View all departments':
-                viewTable('department', db);
+                db.query('SELECT * FROM department', (err, results) => {
+                    console.table(results);
+                  });
                 break;
             case 'View all roles':
-                viewTable('role', db);
+                db.query('SELECT role.id, role.title, role.salary, department.name AS department FROM role LEFT JOIN department on role.department_id=department.id', (err, results) => {
+                    console.table(results);
+                  });
                 break;
             case 'View all employees':
-                viewTable('employee', db);
+                db.query('SELECT * FROM employee', (err, results) => {
+                    console.table(results);
+                  });
                 break;
             case 'Add a department':
                 console.log(answers.newDepartment);
