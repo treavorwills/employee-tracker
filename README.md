@@ -1,5 +1,5 @@
 # Employee Tracker
-  undefined
+
 ### [ GitHub: treavorwills ]( https://github.com/treavorwills )
 ## Description
 CLI to manage a company's employee database using Node.js, inquirer and MySql
