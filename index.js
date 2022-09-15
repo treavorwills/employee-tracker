@@ -1,7 +1,7 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const cTable = require('console.table');
-const viewTable = require('./helpers/view_table');
+const editEntry = require('./helpers/edit_entry');
 const addEntry = require('./helpers/add_entry');
 
 // Connect to database
@@ -31,8 +31,7 @@ function getTask() {
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Update an employee\'s role',
-                'Other'
+                'Update an employee\'s role'
             ]
         },
         {
@@ -83,6 +82,18 @@ function getTask() {
             message: 'New Employee\'s Manager ID',
             when: (answers) => answers.task === 'Add an employee'
         },
+        {
+            type: 'input',
+            name: 'updateEmployeeId',
+            message: 'Which Employee\'s role would you like to change (ID)?',
+            when: (answers) => answers.task === 'Update an employee\'s role',
+        },
+        {
+            type: 'input',
+            name: 'updateEmployeeRole',
+            message: 'What is the ID of their new role?',
+            when: (answers) => answers.task === 'Update an employee\'s role',
+        },
     ];
 
     inquirer.prompt(question).then(answers => {
@@ -98,7 +109,7 @@ function getTask() {
                   });
                 break;
             case 'View all employees':
-                db.query('SELECT * FROM employee', (err, results) => {
+                db.query('SELECT employee.id, CONCAT(employee.first_name, \' \', employee.last_name) AS name, role.title AS role, role.salary, department.name AS department, CONCAT(manager.first_name, \' \', manager.last_name) AS manager FROM employee LEFT JOIN employee as manager ON employee.manager_id=manager.id LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department on role.department_id=department.id', (err, results) => {
                     console.table(results);
                   });
                 break;
@@ -115,7 +126,7 @@ function getTask() {
                 addEntry('employee', answers, db);
                 break;
             case 'Update an employee\'s role':
-                console.log('update role');
+                editEntry('employee', db, answers);
                 break;
             case 'Other':
                 console.log('Other');
@@ -128,3 +139,4 @@ function getTask() {
 }
 
 getTask();
+
